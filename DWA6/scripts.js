@@ -3,10 +3,10 @@ import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
 let page = 1;
 let matches = books
 
-let mm =  matches.slice(0, BOOKS_PER_PAGE)
+let BooksPerPage =  matches.slice(0, BOOKS_PER_PAGE)
 
 function bookList(createdDocument){
-    for (const { author, id, image, title } of mm) {
+    for (const { author, id, image, title } of BooksPerPage) {
         const createdDocument = document.createDocumentFragment()
         const element = document.createElement('button')
         element.classList = 'preview'
@@ -142,26 +142,27 @@ document.querySelector('[data-search-form]').addEventListener('submit', (event) 
     }
 
     document.querySelector('[data-list-items]').innerHTML = ''
-    
+    BooksPerPage = result.slice(0, BOOKS_PER_PAGE)
     bookList('newItems')
 
     
-    document.querySelector('[data-list-button]').disabled = (matches.length - (page * BOOKS_PER_PAGE)) < 1
-
-    document.querySelector('[data-list-button]').innerHTML = `
-        <span>Show more</span>
-        <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
-    `
+  
 
     window.scrollTo({top: 0, behavior: 'smooth'});
     document.querySelector('[data-search-overlay]').open = false
 })
 
+document.querySelector('[data-list-button]').innerHTML = `Show more <span class="list__remaining">(${books.length - BOOKS_PER_PAGE})</span>`
 document.querySelector('[data-list-button]').addEventListener('click', () => {
-  mm = matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)
+    BooksPerPage = matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)
 bookList('fragment')
     page += 1
-    document.querySelector('[data-list-button]').innerText = `Show more (${books.length - BOOKS_PER_PAGE})`
+    document.querySelector('[data-list-button]').disabled = (matches.length - (page * BOOKS_PER_PAGE)) <= 0
+
+    document.querySelector('[data-list-button]').innerHTML = `
+        <span>Show more</span>
+        <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
+    `
 })
 
 document.querySelector('[data-list-items]').addEventListener('click', (event) => {
