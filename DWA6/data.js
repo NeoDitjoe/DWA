@@ -25411,3 +25411,37 @@ export const  books = [
     "author": "8e7083f4-7613-4872-a21b-62fbe33fe180"
   }
 ]
+
+export const HTML = {
+  search : {
+     cancel : document.querySelector('[data-search-cancel]') ,
+     overlay: document.querySelector('[data-search-overlay]'),
+     title: document.querySelector('[data-search-title]'),
+     form: document.querySelector('[data-search-form]')
+    },
+
+    list : {
+      items : document.querySelector('[data-list-items]'),
+      button : document.querySelector('[data-list-button]'),
+      close : document.querySelector('[data-list-close]'),
+      active : document.querySelector('[data-list-active]'),
+      message : document.querySelector('[data-list-message]'),
+      blur : document.querySelector('[data-list-blur]'),
+      image : document.querySelector('[data-list-image]'),
+      title : document.querySelector('[data-list-title]'),
+      subtitle : document.querySelector('[data-list-subtitle]'),
+      description : document.querySelector('[data-list-description]')
+    },
+
+    setting : {
+      cancel : document.querySelector('[data-settings-cancel]'),
+      overlay : document.querySelector('[data-settings-overlay]'),
+      form : document.querySelector('[data-settings-form]'),
+      theme : document.querySelector('[data-settings-theme]')
+    },
+
+    header : {
+      search : document.querySelector('[data-header-search]'),
+      settings : document.querySelector('[data-header-settings]'),
+    }
+  }

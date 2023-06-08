@@ -1,4 +1,4 @@
-import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
+import { books, authors, genres, BOOKS_PER_PAGE, HTML } from './data.js'
 
 let page = 1;
 let matches = books
@@ -25,14 +25,14 @@ function bookList(createdDocument){
         `
     
         createdDocument.appendChild(element)
-        document.querySelector('[data-list-items]').appendChild(createdDocument)
+        HTML.list.items.appendChild(createdDocument)
     }
     
 }
 
 bookList('starting')
 
-function filter(filterHTML, firstElement,thing, gendreAuthor){
+function filter(filterHTML, firstElement, query, gendreAuthor){
     filterHTML = document.createDocumentFragment()
     firstElement = document.createElement('option')
     firstElement.value = 'any'
@@ -46,70 +46,63 @@ function filter(filterHTML, firstElement,thing, gendreAuthor){
         filterHTML.appendChild(element)
     }
 
-    document.querySelector(thing).appendChild(filterHTML)
+    document.querySelector(query).appendChild(filterHTML)
 }
 
 filter("genreHtml", "firstGenreElement",'[data-search-genres]' ,genres)
 filter("authorsHtml", "firstAuthorsElement",'[data-search-authors]' ,authors)
 
-
+const Element = document.documentElement.style
 
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    document.querySelector('[data-settings-theme]').value = 'night'
-    document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
-    document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+    HTML.setting.theme.value = 'night'
+    Element.setProperty('--color-dark', '255, 255, 255');
+    Element.setProperty('--color-light', '10, 10, 20');
 } else {
-    document.querySelector('[data-settings-theme]').value = 'day'
-    document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
-    document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+    HTML.setting.theme.value = 'day'
+    Element.setProperty('--color-dark', '10, 10, 20');
+    Element.setProperty('--color-light', '255, 255, 255');
 }
 
+const  bookCount = (matches.length - (page * BOOKS_PER_PAGE))
 
-document.querySelector('[data-list-button]').disabled = (matches.length - (page * BOOKS_PER_PAGE)) < 0
+HTML.list.button.disabled = bookCount < 0
 
-document.querySelector('[data-list-button]').innerHTML = `
+HTML.list.button.innerHTML = `
     <span>Show more</span>
-    <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
+    <span class="list__remaining"> (${bookCount > 0 ? bookCount : 0})</span>
 `
 
-document.querySelector('[data-search-cancel]').addEventListener('click', () => {
-    document.querySelector('[data-search-overlay]').open = false
+function events(button, overlay, trueOrFalse, extra){
+    button.addEventListener('click', () => {
+        overlay.open = trueOrFalse 
+        extra
 })
+}
 
-document.querySelector('[data-settings-cancel]').addEventListener('click', () => {
-    document.querySelector('[data-settings-overlay]').open = false
-})
+events(HTML.search.cancel, HTML.search.overlay, false)
+events(HTML.setting.cancel, HTML.setting.overlay, false)
+events(HTML.header.settings, HTML.setting.overlay, true)
+events(HTML.list.close, HTML.list.active, false)
+events(HTML.header.search, HTML.search.overlay, true, HTML.search.title.focus())
 
-document.querySelector('[data-header-search]').addEventListener('click', () => {
-    document.querySelector('[data-search-overlay]').open = true 
-    document.querySelector('[data-search-title]').focus()
-})
-
-document.querySelector('[data-header-settings]').addEventListener('click', () => {
-    document.querySelector('[data-settings-overlay]').open = true 
-})
-
-document.querySelector('[data-list-close]').addEventListener('click', () => {
-    document.querySelector('[data-list-active]').open = false
-})
-
-document.querySelector('[data-settings-form]').addEventListener('submit', (event) => {
+HTML.setting.form.addEventListener('submit', (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
     const { theme } = Object.fromEntries(formData)
 
     if (theme === 'night') {
-        document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
-        document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+        Element.setProperty('--color-dark', '255, 255, 255');
+        Element.setProperty('--color-light', '10, 10, 20');
     } else {
-        document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
-        document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+        Element.setProperty('--color-dark', '10, 10, 20');
+        Element.setProperty('--color-light', '255, 255, 255');
     }
     
-    document.querySelector('[data-settings-overlay]').open = false
+    HTML.setting.overlay.open = false
 })
 
-document.querySelector('[data-search-form]').addEventListener('submit', (event) => {
+HTML.search.form.addEventListener('submit', (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
     const filters = Object.fromEntries(formData)
@@ -136,12 +129,12 @@ document.querySelector('[data-search-form]').addEventListener('submit', (event) 
     matches = result
 
     if (result.length < 1) {
-        document.querySelector('[data-list-message]').classList.add('list__message_show')
+        HTML.list.message.classList.add('list__message_show')
     } else {
-        document.querySelector('[data-list-message]').classList.remove('list__message_show')
+        HTML.list.message.classList.remove('list__message_show')
     }
 
-    document.querySelector('[data-list-items]').innerHTML = ''
+    HTML.list.items.innerHTML = ''
     BooksPerPage = result.slice(0, BOOKS_PER_PAGE)
     bookList('newItems')
 
@@ -149,23 +142,23 @@ document.querySelector('[data-search-form]').addEventListener('submit', (event) 
   
 
     window.scrollTo({top: 0, behavior: 'smooth'});
-    document.querySelector('[data-search-overlay]').open = false
+    HTML.search.overlay.open = false
 })
 
-document.querySelector('[data-list-button]').innerHTML = `Show more <span class="list__remaining">(${books.length - BOOKS_PER_PAGE})</span>`
-document.querySelector('[data-list-button]').addEventListener('click', () => {
+HTML.list.button.innerHTML = `Show more <span class="list__remaining">(${books.length - BOOKS_PER_PAGE})</span>`
+HTML.list.button.addEventListener('click', () => {
     BooksPerPage = matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)
 bookList('fragment')
     page += 1
-    document.querySelector('[data-list-button]').disabled = (matches.length - (page * BOOKS_PER_PAGE)) <= 0
+    HTML.list.button.disabled = bookCount <= 0
 
-    document.querySelector('[data-list-button]').innerHTML = `
+    HTML.list.button.innerHTML = `
         <span>Show more</span>
         <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
     `
 })
 
-document.querySelector('[data-list-items]').addEventListener('click', (event) => {
+HTML.list.items.addEventListener('click', (event) => {
     const pathArray = Array.from(event.path || event.composedPath())
     let active = null
 
@@ -185,11 +178,11 @@ document.querySelector('[data-list-items]').addEventListener('click', (event) =>
     }
     
     if (active) {
-        document.querySelector('[data-list-active]').open = true
-        document.querySelector('[data-list-blur]').src = active.image
-        document.querySelector('[data-list-image]').src = active.image
-        document.querySelector('[data-list-title]').innerText = active.title
-        document.querySelector('[data-list-subtitle]').innerText = `${authors[active.author]} (${new Date(active.published).getFullYear()})`
-        document.querySelector('[data-list-description]').innerText = active.description
+        HTML.list.active.open = true
+        HTML.list.blur.src = active.image
+        HTML.list.image.src = active.image
+        HTML.list.title.innerText = active.title
+        HTML.list.subtitle.innerText = `${authors[active.author]} (${new Date(active.published).getFullYear()})`
+        HTML.list.description.innerText = active.description
     }
 })
