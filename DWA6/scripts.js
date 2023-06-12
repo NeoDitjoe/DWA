@@ -136,10 +136,7 @@ HTML.search.form.addEventListener('submit', (event) => {
 
     HTML.list.items.innerHTML = ''
     BooksPerPage = result.slice(0, BOOKS_PER_PAGE)
-    bookList('newItems')
-
-    
-  
+    bookList('newItems');
 
     window.scrollTo({top: 0, behavior: 'smooth'});
     HTML.search.overlay.open = false
