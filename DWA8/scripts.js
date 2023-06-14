@@ -1,6 +1,6 @@
 import { books, authors, genres, BOOKS_PER_PAGE, HTML } from './data.js'
 
-page = 1;
+let page = 1;
 let matches = books
 
 let BooksPerPage =  matches.slice(0, BOOKS_PER_PAGE)
