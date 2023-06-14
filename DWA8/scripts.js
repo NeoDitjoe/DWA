@@ -6,8 +6,17 @@ let matches = books
 let BooksPerPage =  matches.slice(0, BOOKS_PER_PAGE)
 
 function bookList(createdDocument){
+   function HTMLl(){
+
+    page = 1;
+    matches = books
+
+    BooksPerPage =  matches.slice(0, BOOKS_PER_PAGE)
+
+    const elements = []
+
     for (const { author, id, image, title } of BooksPerPage) {
-        const createdDocument = document.createDocumentFragment()
+ 
         const element = document.createElement('button')
         element.classList = 'preview'
         element.setAttribute('data-preview', id)
@@ -23,11 +32,24 @@ function bookList(createdDocument){
                 <div class="preview__author">${authors[author]}</div>
             </div>
         `
-    
-        createdDocument.appendChild(element)
+        elements.push(element)
+    }
+
+    return elements
+   }
+
+    function appendToo(){
+
+        const createdDocument = document.createDocumentFragment()
+
+        const elements = HTMLl();
+        for (const element of elements){
+            createdDocument.appendChild(element)
+        }
+
         HTML.list.items.appendChild(createdDocument)
     }
-    
+    appendToo()
 }
 
 bookList('starting')
