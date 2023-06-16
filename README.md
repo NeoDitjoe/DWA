@@ -27,7 +27,7 @@ The code is a basic HTML web page that implements a people search functionality.
 
 ## Getting started
 ```
-1. Clone repository from [github ](https://github.com/NeoDitjoe/DWA.git)
+1. Clone repository from [github](https://github.com/NeoDitjoe/DWA.git)
 ```
 2. Open DWA3 folder
 ```
