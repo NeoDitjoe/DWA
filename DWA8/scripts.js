@@ -1,22 +1,28 @@
 import { books, authors, genres, BOOKS_PER_PAGE, HTML } from './data.js'
 
-let page = 1;
-let matches = books
+function variable(){
+    let page = 1;
+    let matches = books
 
-let BooksPerPage =  matches.slice(0, BOOKS_PER_PAGE)
+    let BooksPerPage =  matches.slice(0, BOOKS_PER_PAGE)
 
-function bookList(createdDocument){
-   function HTMLl(){
+    return {
+        page,
+        matches,
+        BooksPerPage
+    }
+}
 
-    page = 1;
-    matches = books
+const variables = variable()
 
-    BooksPerPage =  matches.slice(0, BOOKS_PER_PAGE)
 
-    const elements = []
 
-    for (const { author, id, image, title } of BooksPerPage) {
- 
+function bookList(){
+
+    for (const { author, id, image, title } of variables.BooksPerPage) {
+
+        const createdDocument = document.createDocumentFragment()
+        
         const element = document.createElement('button')
         element.classList = 'preview'
         element.setAttribute('data-preview', id)
@@ -32,27 +38,14 @@ function bookList(createdDocument){
                 <div class="preview__author">${authors[author]}</div>
             </div>
         `
-        elements.push(element)
-    }
-
-    return elements
-   }
-
-    function appendToo(){
-
-        const createdDocument = document.createDocumentFragment()
-
-        const elements = HTMLl();
-        for (const element of elements){
-            createdDocument.appendChild(element)
-        }
-
+    
+        createdDocument.appendChild(element)
         HTML.list.items.appendChild(createdDocument)
     }
-    appendToo()
+    
 }
 
-bookList('starting')
+bookList()
 
 function filter(filterHTML, firstElement, query, gendreAuthor){
     filterHTML = document.createDocumentFragment()
@@ -86,7 +79,7 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').match
     Element.setProperty('--color-light', '255, 255, 255');
 }
 
-const  bookCount = (matches.length - (page * BOOKS_PER_PAGE))
+const  bookCount = (variables.matches.length - (variables.page * BOOKS_PER_PAGE))
 
 HTML.list.button.disabled = bookCount < 0
 
@@ -95,10 +88,16 @@ HTML.list.button.innerHTML = `
     <span class="list__remaining"> (${bookCount > 0 ? bookCount : 0})</span>
 `
 
-function events(button, overlay, trueOrFalse, extra){
+
+
+
+
+function events(button, overlay, trueOrFalse, extra) {
+
     button.addEventListener('click', () => {
         overlay.open = trueOrFalse 
         extra
+        
 })
 }
 
@@ -107,6 +106,10 @@ events(HTML.setting.cancel, HTML.setting.overlay, false)
 events(HTML.header.settings, HTML.setting.overlay, true)
 events(HTML.list.close, HTML.list.active, false)
 events(HTML.header.search, HTML.search.overlay, true, HTML.search.title.focus())
+
+
+
+
 
 HTML.setting.form.addEventListener('submit', (event) => {
     event.preventDefault()
@@ -147,8 +150,8 @@ HTML.search.form.addEventListener('submit', (event) => {
         }
     }
 
-    page = 1;
-    matches = result
+    
+    variables.matches = result
 
     if (result.length < 1) {
         HTML.list.message.classList.add('list__message_show')
@@ -157,8 +160,9 @@ HTML.search.form.addEventListener('submit', (event) => {
     }
 
     HTML.list.items.innerHTML = ''
-    BooksPerPage = result.slice(0, BOOKS_PER_PAGE)
-    bookList('newItems');
+    variables.BooksPerPage = result.slice(0, BOOKS_PER_PAGE)
+
+    bookList();
 
     window.scrollTo({top: 0, behavior: 'smooth'});
     HTML.search.overlay.open = false
@@ -166,14 +170,14 @@ HTML.search.form.addEventListener('submit', (event) => {
 
 HTML.list.button.innerHTML = `Show more <span class="list__remaining">(${books.length - BOOKS_PER_PAGE})</span>`
 HTML.list.button.addEventListener('click', () => {
-    BooksPerPage = matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)
-bookList('fragment')
-    page += 1
+    variables.BooksPerPage = variables.matches.slice(variables.page * BOOKS_PER_PAGE, (variables.page + 1) * BOOKS_PER_PAGE)
+bookList()
+    variables.page += 1
     HTML.list.button.disabled = bookCount <= 0
 
     HTML.list.button.innerHTML = `
         <span>Show more</span>
-        <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
+        <span class="list__remaining"> (${(variables.matches.length - (variables.page * BOOKS_PER_PAGE)) > 0 ? (variables.matches.length - (variables.page * BOOKS_PER_PAGE)) : 0})</span>
     `
 })
 
@@ -204,4 +208,4 @@ HTML.list.items.addEventListener('click', (event) => {
         HTML.list.subtitle.innerText = `${authors[active.author]} (${new Date(active.published).getFullYear()})`
         HTML.list.description.innerText = active.description
     }
-})
+}) 
