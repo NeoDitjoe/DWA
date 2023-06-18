@@ -1,71 +1,84 @@
 import { books, authors, genres, BOOKS_PER_PAGE, HTML } from './data.js'
 
-function variable(){
-    let page = 1;
-    let matches = books
+function factoryFuntion(){
 
-    let BooksPerPage =  matches.slice(0, BOOKS_PER_PAGE)
+    function variable(){
+        let page = 1;
+        let matches = books
+    
+        let BooksPerPage =  matches.slice(0, BOOKS_PER_PAGE)
+    
+        return {
+            page: page,
+            matches: matches,
+            BooksPerPage: BooksPerPage
+        }
+    }
+    
+    const variables = variable()
+
+    function bookList(){
+
+        for (const { author, id, image, title } of variables.BooksPerPage) {
+    
+            const createdDocument = document.createDocumentFragment()
+            
+            const element = document.createElement('button')
+            element.classList = 'preview'
+            element.setAttribute('data-preview', id)
+        
+            element.innerHTML = `
+                <img
+                    class="preview__image"
+                    src="${image}"
+                />
+                
+                <div class="preview__info">
+                    <h3 class="preview__title">${title}</h3>
+                    <div class="preview__author">${authors[author]}</div>
+                </div>
+            `
+        
+            createdDocument.appendChild(element)
+            HTML.list.items.appendChild(createdDocument)
+        }
+        
+    }
+    
+
+    function filter(filterHTML, firstElement, query, gendreAuthor){
+        filterHTML = document.createDocumentFragment()
+        firstElement = document.createElement('option')
+        firstElement.value = 'any'
+        firstElement.innerText = 'All Genres'
+        filterHTML.appendChild(firstElement)
+    
+        for (const [id, name] of Object.entries(gendreAuthor)) {
+            const element = document.createElement('option')
+            element.value = id
+            element.innerText = name
+            filterHTML.appendChild(element)
+        }
+    
+        document.querySelector(query).appendChild(filterHTML)
+    }
+    
 
     return {
-        page,
-        matches,
-        BooksPerPage
+        bookList: bookList,
+        filter: filter,
+        variables: variables,
+ 
     }
 }
 
-const variables = variable()
+const factoryFuntions = factoryFuntion()
+
+factoryFuntions.bookList()
+factoryFuntions.filter("genreHtml", "firstGenreElement",'[data-search-genres]' ,genres)
+factoryFuntions.filter("authorsHtml", "firstAuthorsElement",'[data-search-authors]' ,authors)
 
 
-
-function bookList(){
-
-    for (const { author, id, image, title } of variables.BooksPerPage) {
-
-        const createdDocument = document.createDocumentFragment()
-        
-        const element = document.createElement('button')
-        element.classList = 'preview'
-        element.setAttribute('data-preview', id)
-    
-        element.innerHTML = `
-            <img
-                class="preview__image"
-                src="${image}"
-            />
-            
-            <div class="preview__info">
-                <h3 class="preview__title">${title}</h3>
-                <div class="preview__author">${authors[author]}</div>
-            </div>
-        `
-    
-        createdDocument.appendChild(element)
-        HTML.list.items.appendChild(createdDocument)
-    }
-    
-}
-
-bookList()
-
-function filter(filterHTML, firstElement, query, gendreAuthor){
-    filterHTML = document.createDocumentFragment()
-    firstElement = document.createElement('option')
-    firstElement.value = 'any'
-    firstElement.innerText = 'All Genres'
-    filterHTML.appendChild(firstElement)
-
-    for (const [id, name] of Object.entries(gendreAuthor)) {
-        const element = document.createElement('option')
-        element.value = id
-        element.innerText = name
-        filterHTML.appendChild(element)
-    }
-
-    document.querySelector(query).appendChild(filterHTML)
-}
-
-filter("genreHtml", "firstGenreElement",'[data-search-genres]' ,genres)
-filter("authorsHtml", "firstAuthorsElement",'[data-search-authors]' ,authors)
 
 const Element = document.documentElement.style
 
@@ -79,7 +92,7 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').match
     Element.setProperty('--color-light', '255, 255, 255');
 }
 
-const  bookCount = (variables.matches.length - (variables.page * BOOKS_PER_PAGE))
+const  bookCount = (factoryFuntions.variables.matches.length - (factoryFuntions.variables.page * BOOKS_PER_PAGE))
 
 HTML.list.button.disabled = bookCount < 0
 
@@ -87,9 +100,6 @@ HTML.list.button.innerHTML = `
     <span>Show more</span>
     <span class="list__remaining"> (${bookCount > 0 ? bookCount : 0})</span>
 `
-
-
-
 
 
 function events(button, overlay, trueOrFalse, extra) {
@@ -151,7 +161,7 @@ HTML.search.form.addEventListener('submit', (event) => {
     }
 
     
-    variables.matches = result
+    factoryFuntions.variables.matches = result
 
     if (result.length < 1) {
         HTML.list.message.classList.add('list__message_show')
@@ -160,9 +170,9 @@ HTML.search.form.addEventListener('submit', (event) => {
     }
 
     HTML.list.items.innerHTML = ''
-    variables.BooksPerPage = result.slice(0, BOOKS_PER_PAGE)
+    factoryFuntions.variables.BooksPerPage = result.slice(0, BOOKS_PER_PAGE)
 
-    bookList();
+    factoryFuntions.bookList();
 
     window.scrollTo({top: 0, behavior: 'smooth'});
     HTML.search.overlay.open = false
@@ -170,14 +180,14 @@ HTML.search.form.addEventListener('submit', (event) => {
 
 HTML.list.button.innerHTML = `Show more <span class="list__remaining">(${books.length - BOOKS_PER_PAGE})</span>`
 HTML.list.button.addEventListener('click', () => {
-    variables.BooksPerPage = variables.matches.slice(variables.page * BOOKS_PER_PAGE, (variables.page + 1) * BOOKS_PER_PAGE)
-bookList()
-    variables.page += 1
+    factoryFuntions.variables.BooksPerPage = factoryFuntions.variables.matches.slice(factoryFuntions.variables.page * BOOKS_PER_PAGE, (factoryFuntions.variables.page + 1) * BOOKS_PER_PAGE)
+    factoryFuntions.bookList()
+    factoryFuntions.variables.page += 1
     HTML.list.button.disabled = bookCount <= 0
 
     HTML.list.button.innerHTML = `
         <span>Show more</span>
-        <span class="list__remaining"> (${(variables.matches.length - (variables.page * BOOKS_PER_PAGE)) > 0 ? (variables.matches.length - (variables.page * BOOKS_PER_PAGE)) : 0})</span>
+        <span class="list__remaining"> (${(factoryFuntions.variables.matches.length - (factoryFuntions.variables.page * BOOKS_PER_PAGE)) > 0 ? (factoryFuntions.variables.matches.length - (factoryFuntions.variables.page * BOOKS_PER_PAGE)) : 0})</span>
     `
 })
 
