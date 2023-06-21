@@ -255,7 +255,7 @@ option {
   color: rgba(var(--color-dark), 0.4);
 }
 
-/* overlay */
+/* overlay
 
 .overlay {
   position: fixed;
@@ -435,4 +435,4 @@ option {
 
 .overlay[open] ~ .backdrop {
   display: block;
-}
+} */
