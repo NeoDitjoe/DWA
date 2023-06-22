@@ -102,20 +102,21 @@ HTML.list.button.innerHTML = `
 `
 
 
-// function events(button, overlay, trueOrFalse, extra) {
+function events(button, overlay, trueOrFalse, extra) {
 
-//     button.addEventListener('click', () => {
-//         overlay.open = trueOrFalse 
-//         extra
+    button.addEventListener('click', () => {
+        overlay.open = trueOrFalse 
+        extra
         
-// })
-// }
+})
+}
 
-// events(HTML.search.cancel, HTML.search.overlay, false)
-// events(HTML.setting.cancel, HTML.setting.overlay, false)
-// events(HTML.header.settings, HTML.setting.overlay, true)
+events(HTML.header.search, HTML.search.overlay, true, HTML.search.title.focus())
+events(HTML.search.cancel, HTML.search.overlay, false)
+events(HTML.setting.cancel, HTML.setting.overlay, false)
+events(HTML.header.settings, HTML.setting.overlay, true)
 // events(HTML.list.close, HTML.list.active, false)
-// events(HTML.header.search, HTML.search.overlay, true, HTML.search.title.focus())
+
 
 
 

@@ -28,12 +28,7 @@ bookDetails.innerHTML =  `
                 border-radius: 8px;;
               }
             }
-            
-            .overlay__form {
-              padding-bottom: 0.5rem;
-              margin: 0 auto;
-            }
-            
+                
             .overlay__row {
               display: flex;
               gap: 0.5rem;
@@ -58,54 +53,7 @@ bookDetails.innerHTML =  `
             .overlay__button_primary {
               background-color: rgba(var(--color-blue), 1);
               color: rgba(var(--color-force-light), 1);
-            }
-            
-            .overlay__button:hover {
-              background-color: rgba(var((var(--color-blue))), 0.2);
-            }
-            
-            
-            .overlay__button_primary:hover {
-              background-color: rgba(var(--color-blue), 0.8);
-              color: rgba(var(--color-force-light), 1);
-            }
-            
-            .overlay__input {
-              width: 100%;
-              margin-bottom: 0.5rem;
-              background-color: rgba(var(--color-dark), 0.05);
-              border-width: 0;
-              border-radius: 6px;
-              width: 100%;
-              height: 4rem;
-              color: rgba(var(--color-dark), 1);
-              padding: 1rem 0.5rem 0 0.75rem;
-              font-size: 1.1rem;
-              font-weight: bold;
-              font-family: Roboto, sans-serif;
-              cursor: pointer;
-            }
-            
-            .overlay__input_select {
-              padding-left: 0.5rem;
-            }
-            
-            .overlay__field {
-              position: relative;
-              display: block;
-            }
-            
-            .overlay__label {
-              position: absolute;
-              top: 0.75rem;
-              left: 0.75rem;
-              font-size: 0.85rem;
-              color: rgba(var(--color-dark), 0.4);
-            }
-            
-            .overlay__input:hover {
-              background-color: rgba(var(--color-dark), 0.1);
-            }
+            }        
             
             .overlay__title {
               padding: 1rem 0 0.25rem;
@@ -146,6 +94,15 @@ bookDetails.innerHTML =  `
             
             .overlay__data_secondary {
               color: rgba(var(--color-dark), 0.6)
+            }
+
+            .overlay__button:hover {
+              background-color: rgba(var((var(--color-blue))), 0.2);
+            }
+
+            .overlay__button_primary:hover {
+              background-color: rgba(var(--color-blue), 0.8);
+              color: rgba(var(--color-force-light), 1);
             }
             
             .overlay__content {
@@ -259,9 +216,12 @@ class previewDetails extends HTMLElement{
                 this.shadowRoot.querySelector('[data-list-description]').innerText = active.description
 
                 this.shadowRoot.querySelector('[class="backdrop"]').open = true
+                opo()
 
                 this.shadowRoot.querySelector('[data-list-close]').addEventListener('click', (e)=> {
                     dialog.open = false
+
+                    
                 })
 
             }
