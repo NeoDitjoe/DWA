@@ -175,6 +175,7 @@ class previewDetails extends HTMLElement{
         super();
         this.attachShadow({ mode: 'open'})
         this.button = document.querySelector('[data-list-items]')
+        console.log(this.shadowRoot)
     }
 
     connectedCallback(){ 
@@ -216,7 +217,7 @@ class previewDetails extends HTMLElement{
                 this.shadowRoot.querySelector('[data-list-description]').innerText = active.description
 
                 this.shadowRoot.querySelector('[class="backdrop"]').open = true
-                opo()
+               
 
                 this.shadowRoot.querySelector('[data-list-close]').addEventListener('click', (e)=> {
                     dialog.open = false
