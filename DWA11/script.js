@@ -6,9 +6,6 @@ const subtract = document.querySelector('[data-subtract]');
 const add = document.querySelector('[data-add]');
 const reset = document.querySelector('[data-reset]')
 
-
-
-
 const subtractHandler = () => {
 
   const newValue = parseInt(number.value) - 1;
@@ -22,8 +19,6 @@ const subtractHandler = () => {
     add.disabled = false;
   }
 }
-
-
 
 const addHandler = () => {
 
@@ -58,7 +53,7 @@ const resetHandler = () => {
     add.disabled = false;
   };
 
-}
+} 
 
 
 
@@ -69,41 +64,3 @@ add.addEventListener('click', addHandler);
 reset.addEventListener('click', resetHandler);
 
 
- 
-const numbers = [1, 2, 3, 4, 5];
-
-function double(number) {
-  return number * 2;
-}
-
-const { createStore } = Redux;
-
-// Reducer function
-const reducer = (state = {}, action) => {
-  switch (action.type) {
-    case 'UPDATE_USERNAME':
-      return {
-        ...state,
-        username: action.payload
-      };
-    case 'INCREMENT_COUNTER':
-      return {
-        ...state,
-        counter: state.counter + 1
-      };
-    default:
-      return state;
-  }
-};
-
-// Create the Redux store
-const store = createStore(reducer);
-
-// Dispatch actions
-store.dispatch({ type: 'UPDATE_USERNAME', payload: 'JohnDoe' });
-store.dispatch({ type: 'INCREMENT_COUNTER' });
-
-// Access the updated state
-const currentState = store.getState();
-
-console.log(currentState);
