@@ -1,0 +1,101 @@
+/* Base styles */
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+
+    --primary: #424250;
+    --color-green: #32c48d;
+    --color-white: #ffffff;
+    --color-dark-grey: #33333d;
+    --color-medium-grey: #424250;
+    --color-light-grey: #9ca3ae;
+}
+
+body {
+
+    padding: 0;
+    margin: 0;
+    background-color: var(--primary);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+}
+
+/* Styling */
+
+html {
+
+    height: 100vh;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--color-light-grey)
+}
+
+
+nav img {
+    width: 500px;
+    height: 70px;
+    padding: 1%;
+}
+
+nav {
+    background-color: #333;
+    height: 90px;
+}
+
+/* Counter */
+
+.counter {
+    background-color: #424250;
+}
+
+.counter_value {
+    width: 100%;
+    height: 15rem;
+    text-align: center;
+    font-size: 8rem;
+    font-weight: 900;
+    color: white;
+    background: none;
+    border-width: 0;
+    border-bottom: 1px solid lightgray;
+}
+
+.counter_button:disabled {
+    background-color: red;
+}
+
+
+
+
+
+sl-button {
+    margin-left:16em;
+    margin-top: 5em;
+    color: white;
+    margin-right: 160px;
+}
+
+/* Footer */
+
+footer {
+    background-color: #5f5f70;
+    color: lightgray;
+    padding: 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 12.3%;
+}
+
+.footer_link {
+    color: white;
+}
